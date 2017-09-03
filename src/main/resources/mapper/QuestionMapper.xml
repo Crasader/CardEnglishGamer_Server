@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kteam.dao.QuestionDao">
+  <!--redis缓存-->
+  <cache type="org.kteam.dao.RedisCache"/>
+  <!-- 目的：为dao接口方法提供sql语句配置 -->
+  <select id="queryById" resultType="Question" parameterType="int">
+    <!-- 具体的sql -->
+    SELECT ID,question_audio,choose1,choose2,answer
+    FROM
+    Question
+    WHERE
+    ID = #{ID}
+  </select>
+
+  <select id="queryAll" resultType="Question">
+    SELECT
+    ID,question_audio,choose1,choose2,answer
+    FROM
+    Question
+    ORDER BY
+    ID
+    LIMIT #{offset}, #{limit}
+  </select>
+
+  <select id="queryAllPlug" resultType="Question">
+    SELECT
+    *
+    FROM
+    Question
+    ORDER BY
+    ID
+  </select>
+
+  <update id="updateQuestion" parameterType="Question">
+    UPDATE question
+    SET question_audio = #{question_audio},
+    choose1 = #{choose1},
+    choose2 = #{choose2},
+    answer = #{answer}
+    WHERE
+    ID = #{ID}
+
+  </update>
+
+  <insert id="addQuestion">
+    INSERT INTO question(`ID`, `question_audio`, `choose1`,`choose2`,'answer')
+    VALUES(#{ID}, #{question_audio}, #{choose1}, #{choose2},#{answer})
+  </insert>
+
+  <delete id="deleteQuestionById">
+    DELETE FROM question WHERE ID = #{ID}
+  </delete>
+  <select id="countNum" resultType="java.lang.Integer">
+    SELECT
+    COUNT(*)
+    FROM
+    question
+  </select>
+</mapper>
